@@ -7,8 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.listen(3000, () => {
-  console.log("server is running");
+//routes
+
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Hello from the server" });
 });
 
 export default app;

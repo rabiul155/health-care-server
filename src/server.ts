@@ -1,7 +1,13 @@
-import express from "express";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.join((process.cwd(), ".env")) });
 
-const app = express();
+import app from "./app";
 
-app.listen(3000, () => {
-  console.log("server is running");
-});
+async function server() {
+  const server = app.listen(process.env.PORT, () => {
+    console.log("Health care server running");
+  });
+}
+
+server();
