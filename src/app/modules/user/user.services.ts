@@ -26,9 +26,8 @@ const createAdminDB = async (data: UserDataType) => {
 };
 
 const getUserDB = async () => {
-  return {
-    message: "hello user",
-  };
+  const result = await prisma.user.findMany({});
+  return result;
 };
 
 export const userServices = {

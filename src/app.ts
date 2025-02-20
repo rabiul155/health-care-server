@@ -5,6 +5,7 @@ const app = express();
 
 //Import routes
 import { userRoutes } from "./app/modules/user/user.routes";
+import { adminRouter } from "./app/modules/admin/admin.routes";
 
 // middleware
 app.use(cors());
@@ -18,5 +19,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/admin", adminRouter);
 
 export default app;
