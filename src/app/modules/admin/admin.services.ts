@@ -7,21 +7,35 @@ type SearchParam = {
 };
 
 const getAllAdminDB = async (params: any) => {
+  const { search, ...othersField } = params;
+  console.log(params);
   const searchField = ["name", "email"];
-  let whereCondition = {};
+  let whereCondition: any = {};
 
-  if (params.search) {
+  if (search) {
     whereCondition = {
       OR: searchField.map((field) => {
         return {
-          [field]: { contains: params.search, mode: "insensitive" },
+          [field]: { contains: search, mode: "insensitive" },
         };
       }),
     };
   }
+
+  if (Object.keys(othersField).length > 0) {
+    whereCondition.AND = [
+      {
+        ...othersField,
+      },
+    ];
+  }
+
+  console.dir(whereCondition, { depth: Infinity });
+
   const result = await prisma.admin.findMany({
     where: whereCondition,
   });
+
   return result;
 };
 
