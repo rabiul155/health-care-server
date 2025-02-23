@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { sanitizeSearchParam } from "../../utils/helpers";
 
 const prisma = new PrismaClient();
 
@@ -6,12 +7,16 @@ type SearchParam = {
   search: string;
 };
 
-const getAllAdminDB = async (params: any) => {
-  const { search, ...othersField } = params;
-  console.log(params);
+const getAllAdminDB = async (params: Record<string, unknown>) => {
+  const { search, ...othersField } = sanitizeSearchParam(params, [
+    "search",
+    "contactNo",
+    "name",
+    "email",
+  ]);
+
   const searchField = ["name", "email"];
   let whereCondition: any = {};
-
   if (search) {
     whereCondition = {
       OR: searchField.map((field) => {
@@ -29,8 +34,6 @@ const getAllAdminDB = async (params: any) => {
       },
     ];
   }
-
-  console.dir(whereCondition, { depth: Infinity });
 
   const result = await prisma.admin.findMany({
     where: whereCondition,
