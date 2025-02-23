@@ -14,8 +14,9 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
     "name",
     "email",
   ]);
+  const { page, limit } = sanitizeSearchParam(params, ["page", "limit"]);
 
-  const searchField = ["name", "email"];
+  const searchField = ["name", "email", "contactNo"];
   let whereCondition: any = {};
   if (search) {
     whereCondition = {
@@ -37,6 +38,8 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
 
   const result = await prisma.admin.findMany({
     where: whereCondition,
+    skip: (Number(page) - 1) * Number(limit),
+    take: Number(limit),
   });
 
   return result;
