@@ -1,3 +1,5 @@
+import { skip } from "node:test";
+
 export const sanitizeSearchParam = <
   Obj extends Record<string, unknown>,
   Arr extends (keyof Obj)[]
@@ -14,4 +16,19 @@ export const sanitizeSearchParam = <
     }
   }
   return sanitizeSearchParam;
+};
+
+export const paginateOrder = (options: any) => {
+  const page = Number(options.page) || 1;
+  const limit = Number(options.limit) || 10;
+  const skip = (page - 1) * limit;
+  const orderBy = options.orderBy || "createdAt";
+  const order = options.orders || "desc";
+
+  return {
+    limit,
+    skip,
+    orderBy,
+    order,
+  };
 };

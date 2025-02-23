@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { sanitizeSearchParam } from "../../utils/helpers";
+import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,7 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
     "name",
     "email",
   ]);
-  const { page, limit } = sanitizeSearchParam(params, ["page", "limit"]);
+  const { skip, limit, orderBy, order } = paginateOrder(params);
 
   const searchField = ["name", "email", "contactNo"];
   let whereCondition: any = {};
@@ -38,8 +38,11 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
 
   const result = await prisma.admin.findMany({
     where: whereCondition,
-    skip: (Number(page) - 1) * Number(limit),
-    take: Number(limit),
+    skip: skip,
+    take: limit,
+    orderBy: {
+      [orderBy]: order,
+    },
   });
 
   return result;
