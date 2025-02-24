@@ -17,7 +17,7 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
   const { page, skip, limit, orderBy, order } = paginateOrder(params);
 
   const searchField = ["name", "email", "contactNo"];
-  let whereCondition: any = {};
+  let whereCondition: any = { isDeleted: false };
   if (search) {
     whereCondition = {
       OR: searchField.map((field) => {
@@ -74,11 +74,13 @@ const updateAdminDB = async (
   await prisma.admin.findUniqueOrThrow({
     where: {
       id,
+      isDeleted: false,
     },
   });
   const result = await prisma.admin.update({
     where: {
       id,
+      isDeleted: false,
     },
     data: data,
   });
@@ -96,6 +98,7 @@ const deleteAdminDB = async (id: string) => {
     const deleteAdmin = adminDeletion.admin.delete({
       where: {
         id,
+        isDeleted: false,
       },
     });
     const deleteUser = adminDeletion.user.delete({
