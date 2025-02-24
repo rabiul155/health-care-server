@@ -14,7 +14,7 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
     "name",
     "email",
   ]);
-  const { skip, limit, orderBy, order } = paginateOrder(params);
+  const { page, skip, limit, orderBy, order } = paginateOrder(params);
 
   const searchField = ["name", "email", "contactNo"];
   let whereCondition: any = {};
@@ -44,10 +44,30 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
       [orderBy]: order,
     },
   });
+  const total = await prisma.admin.count({
+    where: whereCondition,
+  });
 
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
+
+const getAdminDB = async (id: string) => {
+  const result = await prisma.admin.findUnique({
+    where: {
+      id,
+    },
+  });
   return result;
 };
 
 export const adminServices = {
   getAllAdminDB,
+  getAdminDB,
 };

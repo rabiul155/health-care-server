@@ -26,6 +26,7 @@ export const paginateOrder = (options: any) => {
   const order = options.orders || "desc";
 
   return {
+    page,
     limit,
     skip,
     orderBy,
