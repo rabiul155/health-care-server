@@ -32,6 +32,7 @@ const updateAdmin: RequestHandler = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
+
 const deleteAdmin: RequestHandler = catchAsync(async (req, res, next) => {
   const result = await adminServices.deleteAdminDB(req.params.id as string);
   res.status(200).json({

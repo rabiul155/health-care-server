@@ -98,7 +98,6 @@ const deleteAdminDB = async (id: string) => {
     const deleteAdmin = adminDeletion.admin.delete({
       where: {
         id,
-        isDeleted: false,
       },
     });
     const deleteUser = adminDeletion.user.delete({
@@ -115,6 +114,7 @@ const softDeleteAdminDB = async (id: string) => {
   await prisma.admin.findUniqueOrThrow({
     where: {
       id,
+      isDeleted: false,
     },
   });
 
