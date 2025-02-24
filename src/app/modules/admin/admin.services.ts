@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Admin, PrismaClient } from "@prisma/client";
 import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
 
 const prisma = new PrismaClient();
@@ -67,7 +67,21 @@ const getAdminDB = async (id: string) => {
   return result;
 };
 
+const updateAdminDB = async (
+  id: string,
+  data: Partial<Omit<Admin, "email">>
+) => {
+  const result = await prisma.admin.update({
+    where: {
+      id,
+    },
+    data: data,
+  });
+  return result;
+};
+
 export const adminServices = {
   getAllAdminDB,
   getAdminDB,
+  updateAdminDB,
 };
