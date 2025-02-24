@@ -1,43 +1,59 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { adminServices } from "./admin.services";
+import catchAsync from "../../utils/catchAsync";
 
-const getAllAdmin = async (req: Request, res: Response) => {
-  try {
-    const result = await adminServices.getAllAdminDB(req.query);
-    res.status(200).json({
-      success: true,
-      message: "Admin found",
-      meta: result.meta,
-      data: result.data,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || "Something went wrong",
-      error: err,
-    });
-  }
-};
+const getAllAdmin: RequestHandler = catchAsync(async (req, res, next) => {
+  const result = await adminServices.getAllAdminDB(req.query);
+  res.status(200).json({
+    success: true,
+    message: "Admin found",
+    meta: result.meta,
+    data: result.data,
+  });
+});
 
-const getAdmin = async (req: Request, res: Response) => {
-  console.log(req.params);
-  try {
-    const result = await adminServices.getAdminDB(req.params.id as string);
-    res.status(200).json({
-      success: true,
-      message: "Admin found",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || "Something went wrong",
-      error: err,
-    });
-  }
-};
+const getAdmin: RequestHandler = catchAsync(async (req, res, next) => {
+  const result = await adminServices.getAdminDB(req.params.id as string);
+  res.status(200).json({
+    success: true,
+    message: "Admin found",
+    data: result,
+  });
+});
+
+const updateAdmin: RequestHandler = catchAsync(async (req, res, next) => {
+  const result = await adminServices.updateAdminDB(
+    req.params.id as string,
+    req.body
+  );
+  res.status(200).json({
+    success: true,
+    message: "Admin updated",
+    data: result,
+  });
+});
+
+const deleteAdmin: RequestHandler = catchAsync(async (req, res, next) => {
+  const result = await adminServices.deleteAdminDB(req.params.id as string);
+  res.status(200).json({
+    success: true,
+    message: "Admin deleted",
+    data: result,
+  });
+});
+const softDeleteAdmin: RequestHandler = catchAsync(async (req, res, next) => {
+  const result = await adminServices.softDeleteAdminDB(req.params.id as string);
+  res.status(200).json({
+    success: true,
+    message: "Admin deleted",
+    data: result,
+  });
+});
 
 export const adminController = {
   getAllAdmin,
   getAdmin,
+  updateAdmin,
+  deleteAdmin,
+  softDeleteAdmin,
 };

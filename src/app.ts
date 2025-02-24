@@ -1,11 +1,14 @@
 import express from "express";
 import cors from "cors";
+
 //Initialize the express app
 const app = express();
 
 //Import routes
 import { userRoutes } from "./app/modules/user/user.routes";
 import { adminRouter } from "./app/modules/admin/admin.routes";
+import globalErrorHandler from "./app/errors/globalErrorHandler";
+import notFoundRoute from "./app/utils/notFoundRoute";
 
 // middleware
 app.use(cors());
@@ -20,5 +23,11 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/admin", adminRouter);
+
+//catch not found route
+app.use("*", notFoundRoute);
+
+//global error handler
+app.use(globalErrorHandler);
 
 export default app;
