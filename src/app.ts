@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/admin", adminRouter);
-app.use("api/v1/auth", authRouter);
+app.use("/api/v1/auth", authRouter);
 
 //catch not found route
 app.use("*", notFoundRoute);
