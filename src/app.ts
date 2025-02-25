@@ -7,8 +7,8 @@ const app = express();
 //Import routes
 import { userRoutes } from "./app/modules/user/user.routes";
 import { adminRouter } from "./app/modules/admin/admin.routes";
-import globalErrorHandler from "./app/errors/globalErrorHandler";
-import notFoundRoute from "./app/utils/notFoundRoute";
+import globalErrorHandler from "./app/middleware/globalErrorHandler";
+import notFoundRoute from "./app/middleware/notFoundRoute";
 
 // middleware
 app.use(cors());
