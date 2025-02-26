@@ -9,6 +9,9 @@ export const createToken = (email: string, expires: number) => {
 };
 
 export const verifyToken = (token: string) => {
-  const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-  return decoded;
+  const user = jwt.verify(
+    token,
+    process.env.JWT_SECRET as string
+  ) as JwtPayload;
+  return user;
 };
