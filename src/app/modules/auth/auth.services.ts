@@ -16,7 +16,6 @@ const loginUserDB = async (data: any) => {
   }
 
   const isValidPass = await validatePassword(data.password, result.password);
-  console.log(isValidPass);
 
   return result;
 };
