@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, UserStatus } from "@prisma/client";
 import validatePassword from "../../utils/validatePassword";
 import AppError from "../../utils/appError";
 
@@ -8,6 +8,7 @@ const loginUserDB = async (data: any) => {
   const result = await prisma.user.findUnique({
     where: {
       email: data.email,
+      status: UserStatus.ACTIVE,
     },
   });
 
@@ -27,6 +28,7 @@ const findUser = async (email: string) => {
   const result = await prisma.user.findUnique({
     where: {
       email,
+      status: UserStatus.ACTIVE,
     },
   });
   return result;
