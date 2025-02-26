@@ -23,6 +23,15 @@ const loginUserDB = async (data: any) => {
   return result;
 };
 
+const findUser = async (email: string) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+  return result;
+};
 export const authServices = {
   loginUserDB,
+  findUser,
 };

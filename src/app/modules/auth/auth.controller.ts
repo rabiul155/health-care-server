@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import { authServices } from "./auth.services";
 import { createToken, verifyToken } from "../../utils/JWTHelpers";
 import AppError from "../../utils/appError";
+import { userServices } from "../user/user.services";
 
 const loginUser: RequestHandler = catchAsync(async (req, res, next) => {
   const result = await authServices.loginUserDB(req.body);
@@ -23,7 +24,7 @@ const loginUser: RequestHandler = catchAsync(async (req, res, next) => {
 
 const getToken: RequestHandler = catchAsync(async (req, res, next) => {
   const user = verifyToken(req.cookies.refreshToken);
-  console.log(user);
+  const result = await authServices.findUser(user.email);
   if (!user.email) {
     throw new AppError(500, "User not authenticate");
   }
@@ -35,7 +36,8 @@ const getToken: RequestHandler = catchAsync(async (req, res, next) => {
   });
   res.status(200).json({
     success: true,
-    message: "Logged in successfully",
+    message: "Refresh token get successfully",
+    data: result,
     token: token,
   });
 });
