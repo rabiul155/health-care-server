@@ -16,6 +16,9 @@ const loginUserDB = async (data: any) => {
   }
 
   const isValidPass = await validatePassword(data.password, result.password);
+  if (!isValidPass) {
+    throw new AppError(404, "User not found");
+  }
 
   return result;
 };
