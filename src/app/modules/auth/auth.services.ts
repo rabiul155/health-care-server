@@ -33,6 +33,7 @@ const findUser = async (email: string) => {
   });
   return result;
 };
+
 export const authServices = {
   loginUserDB,
   findUser,

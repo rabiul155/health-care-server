@@ -3,10 +3,6 @@ import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
 
 const prisma = new PrismaClient();
 
-type SearchParam = {
-  search: string;
-};
-
 const getAllAdminDB = async (params: Record<string, unknown>) => {
   const { search, ...othersField } = sanitizeSearchParam(params, [
     "search",
