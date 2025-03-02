@@ -1,7 +1,6 @@
-import { Admin, PrismaClient, UserStatus } from "@prisma/client";
+import { Admin, UserStatus } from "@prisma/client";
 import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
-
-const prisma = new PrismaClient();
+import Prisma from "../../Prisma";
 
 type SearchParam = {
   search: string;
@@ -36,7 +35,7 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
     ];
   }
 
-  const result = await prisma.admin.findMany({
+  const result = await Prisma.admin.findMany({
     where: whereCondition,
     skip: skip,
     take: limit,
@@ -44,7 +43,7 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
       [orderBy]: order,
     },
   });
-  const total = await prisma.admin.count({
+  const total = await Prisma.admin.count({
     where: whereCondition,
   });
 
@@ -59,7 +58,7 @@ const getAllAdminDB = async (params: Record<string, unknown>) => {
 };
 
 const getAdminDB = async (id: string) => {
-  const result = await prisma.admin.findUnique({
+  const result = await Prisma.admin.findUnique({
     where: {
       id,
     },
@@ -71,13 +70,13 @@ const updateAdminDB = async (
   id: string,
   data: Partial<Omit<Admin, "email">>
 ) => {
-  await prisma.admin.findUniqueOrThrow({
+  await Prisma.admin.findUniqueOrThrow({
     where: {
       id,
       isDeleted: false,
     },
   });
-  const result = await prisma.admin.update({
+  const result = await Prisma.admin.update({
     where: {
       id,
       isDeleted: false,
@@ -88,13 +87,13 @@ const updateAdminDB = async (
 };
 
 const deleteAdminDB = async (id: string) => {
-  await prisma.admin.findUniqueOrThrow({
+  await Prisma.admin.findUniqueOrThrow({
     where: {
       id,
     },
   });
 
-  const result = await prisma.$transaction(async (adminDeletion) => {
+  const result = await Prisma.$transaction(async (adminDeletion) => {
     const deleteAdmin = adminDeletion.admin.delete({
       where: {
         id,
@@ -111,14 +110,14 @@ const deleteAdminDB = async (id: string) => {
 };
 
 const softDeleteAdminDB = async (id: string) => {
-  await prisma.admin.findUniqueOrThrow({
+  await Prisma.admin.findUniqueOrThrow({
     where: {
       id,
       isDeleted: false,
     },
   });
 
-  const result = await prisma.$transaction(async (adminDeletion) => {
+  const result = await Prisma.$transaction(async (adminDeletion) => {
     const deleteAdmin = adminDeletion.admin.update({
       where: {
         id,

@@ -1,8 +1,7 @@
-import { PrismaClient, UserRole } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import { UserDataType } from "./user.interface";
 import bcrypt from "bcrypt";
-
-const prisma = new PrismaClient();
+import Prisma from "../../Prisma";
 
 const createAdminDB = async (data: UserDataType) => {
   const hashPass: string = await bcrypt.hash(data.password, 12);
@@ -12,7 +11,7 @@ const createAdminDB = async (data: UserDataType) => {
     role: UserRole.ADMIN,
   };
 
-  const result = await prisma.$transaction(async (transaction) => {
+  const result = await Prisma.$transaction(async (transaction) => {
     const createUser = await transaction.user.create({
       data: userData,
     });
@@ -26,7 +25,7 @@ const createAdminDB = async (data: UserDataType) => {
 };
 
 const getUserDB = async () => {
-  const result = await prisma.user.findMany({});
+  const result = await Prisma.user.findMany({});
   return result;
 };
 
