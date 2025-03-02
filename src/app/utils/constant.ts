@@ -1,1 +1,0 @@
-const USER_ROLE = ["ADMIN", "SUPER_ADMIN", "USER"];

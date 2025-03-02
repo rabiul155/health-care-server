@@ -4,9 +4,9 @@ import catchAsync from "../utils/catchAsync";
 import { verifyToken } from "../utils/JWTHelpers";
 import AppError from "../utils/appError";
 import Prisma from "../Prisma";
-import { USER_ROLE } from "../interface/userRole";
+import { UserRole } from "@prisma/client";
 
-export const authenticate: RequestHandler = catchAsync(
+export const Authenticate: RequestHandler = catchAsync(
   async (req, res, next) => {
     // 1) Getting token and check of it's there
     let token;
@@ -47,7 +47,7 @@ export const authenticate: RequestHandler = catchAsync(
 );
 
 // GRANT ACCESS TO PROTECTED ROUTE
-export const authorization = (...roles: USER_ROLE[]) => {
+export const Authorization = (...roles: UserRole[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user.role)) {
       return next(new AppError(403, "You have no access to this route"));
