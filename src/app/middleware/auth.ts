@@ -1,7 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 
 import catchAsync from "../utils/catchAsync";
-import { verifyToken } from "../utils/JWTHelpers";
+import { verifyToken } from "../utils/AuthHelpers";
 import AppError from "../utils/appError";
 import Prisma from "../Prisma";
 import { UserRole } from "@prisma/client";

@@ -7,7 +7,10 @@ import { Authenticate, Authorization } from "../../middleware/auth";
 const router = express.Router();
 
 //Authenticate all route
-router.use(Authenticate);
+
+router.use(Authenticate); //Authenticate all route
+
+//Authenticate all route
 
 router.get(
   "/",

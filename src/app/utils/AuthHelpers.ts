@@ -1,4 +1,5 @@
 import jwt, { JwtPayload, Secret, SignOptions } from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export const createToken = (email: string, expires: number) => {
   const options: SignOptions = {
@@ -14,4 +15,15 @@ export const verifyToken = (token: string) => {
     process.env.JWT_SECRET as Secret
   ) as JwtPayload;
   return user;
+};
+
+export const hashPassword = async (password: string) => {
+  return await bcrypt.hash(password, 12);
+};
+
+export const validatePassword = async (
+  userPassword: string,
+  hashPassword: string
+) => {
+  return await bcrypt.compare(userPassword, hashPassword);
 };
