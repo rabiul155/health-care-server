@@ -1,3 +1,4 @@
+import AppError from "../../utils/appError";
 import { RequestHandler } from "express";
 import catchAsync from "../../utils/catchAsync";
 import { authServices } from "./auth.services";

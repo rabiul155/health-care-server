@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import { adminServices } from "./admin.services";
 import catchAsync from "../../utils/catchAsync";
 

@@ -1,5 +1,3 @@
-import { skip } from "node:test";
-
 export const sanitizeSearchParam = <
   Obj extends Record<string, unknown>,
   Arr extends (keyof Obj)[]
