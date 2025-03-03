@@ -79,7 +79,7 @@ const forgotPassword = async (payload: any) => {
       email: payload.email,
     },
   });
-  const token = createToken(payload.email, 5 * 60 * 1000);
+  const token = createToken(payload.email, 5 * 60);
   const link =
     process.env.RESET_PASSWORD_LINK + `?email=${user.email}&token=${token}`;
 
@@ -93,6 +93,7 @@ const resetPassword = async (token: string | undefined, payload: any) => {
     throw new AppError(400, "Access denied");
   }
   const isValidToken = verifyToken(token);
+  console.log(isValidToken);
 
   if (!isValidToken) {
     throw new AppError(400, "Session timeout please resend");

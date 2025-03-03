@@ -28,8 +28,8 @@ const getToken: RequestHandler = catchAsync(async (req, res, next) => {
   if (!user.email) {
     throw new AppError(401, "User not authenticate");
   }
-  const token = createToken(user.email, 7 * 24 * 60 * 60 * 1000);
-  const refreshToken = createToken(user.email, 30 * 24 * 60 * 60 * 1000);
+  const token = createToken(user.email, 7 * 24 * 60 * 60);
+  const refreshToken = createToken(user.email, 30 * 24 * 60 * 60);
   res.cookie("refreshToken", refreshToken, {
     secure: false,
     httpOnly: true,
