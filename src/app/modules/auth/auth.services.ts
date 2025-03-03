@@ -2,7 +2,12 @@ import { UserStatus } from "@prisma/client";
 import AppError from "../../utils/appError";
 import Prisma from "../../Prisma";
 import { JwtPayload } from "jsonwebtoken";
-import { hashPassword, validatePassword } from "../../utils/AuthHelpers";
+import {
+  createToken,
+  hashPassword,
+  validatePassword,
+} from "../../utils/AuthHelpers";
+import sendEmail from "../../utils/emailSender";
 
 const loginUserDB = async (data: any) => {
   const result = await Prisma.user.findUnique({
@@ -67,8 +72,24 @@ const changePasswordDB = async (user: JwtPayload, payload: any) => {
   });
 };
 
+const forgotPassword = async (payload: any) => {
+  const user = await Prisma.user.findUniqueOrThrow({
+    where: {
+      email: payload.email,
+    },
+  });
+  const token = createToken(payload.email, 5 * 60 * 1000);
+  const link =
+    process.env.RESET_PASSWORD_LINK + `?email=${user.email}&token=${token}`;
+
+  const message = await sendEmail(user.email, "Reset password", link);
+
+  return message;
+};
+
 export const authServices = {
   loginUserDB,
   findUser,
   changePasswordDB,
+  forgotPassword,
 };

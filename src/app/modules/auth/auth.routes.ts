@@ -8,6 +8,8 @@ router.post("/login", authController.loginUser);
 
 router.post("/change-password", Authenticate, authController.changePassword);
 
+router.post("/forgot-password", authController.forgotPassword);
+
 router.get("/token", authController.getToken);
 
 export const authRouter = router;
