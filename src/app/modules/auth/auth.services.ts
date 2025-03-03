@@ -6,6 +6,7 @@ import {
   createToken,
   hashPassword,
   validatePassword,
+  verifyToken,
 } from "../../utils/AuthHelpers";
 import sendEmail from "../../utils/emailSender";
 
@@ -87,9 +88,33 @@ const forgotPassword = async (payload: any) => {
   return message;
 };
 
+const resetPassword = async (token: string | undefined, payload: any) => {
+  if (!token) {
+    throw new AppError(400, "Access denied");
+  }
+  const isValidToken = verifyToken(token);
+
+  if (!isValidToken) {
+    throw new AppError(400, "Session timeout please resend");
+  }
+
+  const hashPass = await hashPassword(payload.password);
+  const user = await Prisma.user.update({
+    where: {
+      email: payload.email,
+    },
+    data: {
+      password: hashPass,
+    },
+  });
+
+  return user;
+};
+
 export const authServices = {
   loginUserDB,
   findUser,
   changePasswordDB,
   forgotPassword,
+  resetPassword,
 };
