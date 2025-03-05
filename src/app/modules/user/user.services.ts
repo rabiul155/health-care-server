@@ -13,7 +13,6 @@ const createAdminDB = async (req: any) => {
   const userData = {
     email: data.admin.email,
     password: hashPass,
-    profilePhoto: uploadImage.secure_url,
     role: UserRole.ADMIN,
   };
 
@@ -22,7 +21,7 @@ const createAdminDB = async (req: any) => {
       data: userData,
     });
     const createAdmin = await transaction.admin.create({
-      data: data.admin,
+      data: { ...data.admin, profilePhoto: uploadImage.secure_url },
     });
     return { user: createUser, admin: createAdmin };
   });
