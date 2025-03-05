@@ -1,6 +1,5 @@
 import { UserRole } from "@prisma/client";
 import { UserDataType } from "./user.interface";
-import bcrypt from "bcrypt";
 import Prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
 
