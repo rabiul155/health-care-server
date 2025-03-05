@@ -15,7 +15,7 @@ import notFoundRoute from "./app/middleware/notFoundRoute";
 // middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //routes

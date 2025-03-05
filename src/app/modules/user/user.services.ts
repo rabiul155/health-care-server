@@ -2,12 +2,18 @@ import { UserRole } from "@prisma/client";
 import { UserDataType } from "./user.interface";
 import Prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
+import { uploadFile } from "../../middleware/fileUploader";
 
-const createAdminDB = async (data: UserDataType) => {
+const createAdminDB = async (req: any) => {
+  const data = req.body;
+  const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
+
   const hashPass = await hashPassword(data.password);
+
   const userData = {
     email: data.admin.email,
     password: hashPass,
+    profilePhoto: uploadImage.secure_url,
     role: UserRole.ADMIN,
   };
 
@@ -18,7 +24,6 @@ const createAdminDB = async (data: UserDataType) => {
     const createAdmin = await transaction.admin.create({
       data: data.admin,
     });
-
     return { user: createUser, admin: createAdmin };
   });
   return result;

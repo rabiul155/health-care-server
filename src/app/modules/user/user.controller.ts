@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import { userServices } from "./user.services";
 
-const createAdmin = async (req: Request, res: Response) => {
+const createAdmin: RequestHandler = async (req, res) => {
   try {
-    const result = await userServices.createAdminDB(req.body);
+    const result = await userServices.createAdminDB(req);
     res.status(200).json({
       success: true,
       message: "Admin created",
@@ -17,7 +17,7 @@ const createAdmin = async (req: Request, res: Response) => {
     });
   }
 };
-const getUser = async (req: Request, res: Response) => {
+const getUser: RequestHandler = async (req, res) => {
   const result = await userServices.getUserDB();
   res.status(200).send(result);
 };

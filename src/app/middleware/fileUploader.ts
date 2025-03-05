@@ -1,5 +1,7 @@
 import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
 import path from "path";
+import fs from "fs";
 import AppError from "../utils/appError";
 
 const multerStorage = multer.diskStorage({
@@ -26,6 +28,29 @@ const uploadImage = multer({
   fileFilter: multerFilter,
 }).single("image");
 
+async function uploadToCloudinary(file: any) {
+  // Configuration
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_DOMAIN,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
+  // Upload an image
+  const uploadResult = await cloudinary.uploader
+    .upload(file.path, {
+      public_id: file.originalname,
+    })
+    .catch((error) => {
+      new AppError(400, "Upload image failed");
+    });
+
+  fs.unlinkSync(file.path);
+
+  return uploadResult;
+}
+
 export const uploadFile = {
   uploadImage,
+  uploadToCloudinary,
 };
