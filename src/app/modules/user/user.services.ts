@@ -1,5 +1,4 @@
 import { UserRole } from "@prisma/client";
-import { UserDataType } from "./user.interface";
 import Prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
 import { uploadFile } from "../../middleware/fileUploader";
