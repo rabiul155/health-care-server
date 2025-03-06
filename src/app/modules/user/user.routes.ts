@@ -29,4 +29,15 @@ router.post(
   userController.createDoctor
 );
 
+router.post(
+  "/create-patient",
+  uploadFile.uploadImage,
+  (req, res, next) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  validateRequest(userValidation.patientValidationSchema),
+  userController.createPatient
+);
+
 export const userRoutes = router;

@@ -53,6 +53,32 @@ const createDoctorDB = async (req: any) => {
   return result;
 };
 
+const createPatientDB = async (req: any) => {
+  const data = req.body;
+  console.log(data);
+  const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
+
+  const hashPass = await hashPassword(data.password);
+
+  const userData = {
+    email: data.patient.email,
+    password: hashPass,
+    role: UserRole.PATIENT,
+  };
+
+  const result = await Prisma.$transaction(async (transaction) => {
+    const createUser = await transaction.user.create({
+      data: userData,
+    });
+
+    const createPatient = await transaction.patient.create({
+      data: { ...data.patient, profilePhoto: uploadImage.secure_url },
+    });
+    return { user: createUser, doctor: createPatient };
+  });
+  return result;
+};
+
 const getUserDB = async () => {
   const result = await Prisma.user.findMany({});
   return result;
@@ -61,5 +87,6 @@ const getUserDB = async () => {
 export const userServices = {
   createAdminDB,
   createDoctorDB,
+  createPatientDB,
   getUserDB,
 };
