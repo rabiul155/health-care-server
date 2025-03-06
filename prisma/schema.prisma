@@ -67,7 +67,6 @@ model Admin {
 
 }
 
-
 model Patient {
   id            String   @id @unique @default(uuid())
   email         String   @unique
