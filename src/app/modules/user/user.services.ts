@@ -8,11 +8,16 @@ const getUserDB = async (params: Record<string, unknown>) => {
   const { search, ...othersField } = sanitizeSearchParam(params, [
     "search",
     "email",
+    "role",
+    "status",
   ]);
   const { page, skip, limit, orderBy, order } = paginateOrder(params);
 
+  console.log(params, search);
+
   const searchField = ["email"];
-  let whereCondition: any = { isDeleted: false };
+
+  let whereCondition: any = {};
 
   if (search) {
     whereCondition = {
@@ -32,6 +37,8 @@ const getUserDB = async (params: Record<string, unknown>) => {
     ];
   }
 
+  // console.dir(whereCondition, { depth: Infinity });
+
   const result = await Prisma.user.findMany({
     where: whereCondition,
     skip: skip,
@@ -40,6 +47,7 @@ const getUserDB = async (params: Record<string, unknown>) => {
       [orderBy]: order,
     },
   });
+
   const total = await Prisma.user.count({
     where: whereCondition,
   });
