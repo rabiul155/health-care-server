@@ -3,6 +3,7 @@ import Prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
 import { uploadFile } from "../../middleware/fileUploader";
 import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
+import { tuple } from "zod";
 
 const getUserDB = async (params: Record<string, unknown>) => {
   const { search, ...othersField } = sanitizeSearchParam(params, [
@@ -46,6 +47,24 @@ const getUserDB = async (params: Record<string, unknown>) => {
     orderBy: {
       [orderBy]: order,
     },
+    select: {
+      id: true,
+      email: true,
+      password: false,
+      role: true,
+      needPasswordChange: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+      admin: true,
+      doctor: true,
+      patient: true,
+    },
+    // include: {
+    //   admin: true,
+    //   doctor: true,
+    //   patient: true,
+    // },
   });
 
   const total = await Prisma.user.count({
@@ -137,9 +156,22 @@ const createPatientDB = async (req: any) => {
   return result;
 };
 
+const updateUserStatusDB = async (id: string, body: any) => {
+  const result = await Prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      status: body.status,
+    },
+  });
+  return result;
+};
+
 export const userServices = {
   createAdminDB,
   createDoctorDB,
   createPatientDB,
+  updateUserStatusDB,
   getUserDB,
 };

@@ -1,7 +1,8 @@
 import { RequestHandler } from "express";
 import { userServices } from "./user.services";
+import catchAsync from "../../utils/catchAsync";
 
-const getUser: RequestHandler = async (req, res) => {
+const getUser: RequestHandler = catchAsync(async (req, res) => {
   const result = await userServices.getUserDB(req.query);
   res.status(200).json({
     success: true,
@@ -9,63 +10,50 @@ const getUser: RequestHandler = async (req, res) => {
     meta: result.meta,
     data: result.data,
   });
-};
+});
 
-const createAdmin: RequestHandler = async (req, res) => {
-  try {
-    const result = await userServices.createAdminDB(req);
-    res.status(200).json({
-      success: true,
-      message: "Admin created",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || "Something went wrong",
-      error: err,
-    });
-  }
-};
+const createAdmin: RequestHandler = catchAsync(async (req, res) => {
+  const result = await userServices.createAdminDB(req);
+  res.status(200).json({
+    success: true,
+    message: "Admin created",
+    data: result,
+  });
+});
 
-const createDoctor: RequestHandler = async (req, res) => {
-  try {
-    const result = await userServices.createDoctorDB(req);
-    res.status(200).json({
-      success: true,
-      message: "Doctor created",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || "Something went wrong",
-      error: err,
-    });
-  }
-};
+const createDoctor: RequestHandler = catchAsync(async (req, res) => {
+  const result = await userServices.createDoctorDB(req);
+  res.status(200).json({
+    success: true,
+    message: "Doctor created",
+    data: result,
+  });
+});
 
-const createPatient: RequestHandler = async (req, res) => {
-  try {
-    const result = await userServices.createPatientDB(req);
+const createPatient: RequestHandler = catchAsync(async (req, res) => {
+  const result = await userServices.createPatientDB(req);
 
-    res.status(200).json({
-      success: true,
-      message: "Patient created",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || "Something went wrong",
-      error: err,
-    });
-  }
-};
+  res.status(200).json({
+    success: true,
+    message: "Patient created",
+    data: result,
+  });
+});
+
+const updateUserStatus = catchAsync(async (req, res, next) => {
+  const result = await userServices.updateUserStatusDB(req.params.id, req.body);
+
+  res.status(200).json({
+    success: true,
+    message: "User status updated",
+    data: result,
+  });
+});
 
 export const userController = {
   createAdmin,
   createDoctor,
   createPatient,
   getUser,
+  updateUserStatus,
 };

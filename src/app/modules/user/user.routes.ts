@@ -41,4 +41,6 @@ router.post(
   userController.createPatient
 );
 
+router.patch("/:id/status", userController.updateUserStatus);
+
 export const userRoutes = router;
