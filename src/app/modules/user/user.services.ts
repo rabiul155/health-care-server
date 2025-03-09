@@ -2,6 +2,57 @@ import { UserRole } from "@prisma/client";
 import Prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
 import { uploadFile } from "../../middleware/fileUploader";
+import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
+
+const getUserDB = async (params: Record<string, unknown>) => {
+  const { search, ...othersField } = sanitizeSearchParam(params, [
+    "search",
+    "email",
+  ]);
+  const { page, skip, limit, orderBy, order } = paginateOrder(params);
+
+  const searchField = ["email"];
+  let whereCondition: any = { isDeleted: false };
+
+  if (search) {
+    whereCondition = {
+      OR: searchField.map((field) => {
+        return {
+          [field]: { contains: search, mode: "insensitive" },
+        };
+      }),
+    };
+  }
+
+  if (Object.keys(othersField).length > 0) {
+    whereCondition.AND = [
+      {
+        ...othersField,
+      },
+    ];
+  }
+
+  const result = await Prisma.user.findMany({
+    where: whereCondition,
+    skip: skip,
+    take: limit,
+    orderBy: {
+      [orderBy]: order,
+    },
+  });
+  const total = await Prisma.user.count({
+    where: whereCondition,
+  });
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
 
 const createAdminDB = async (req: any) => {
   const data = req.body;
@@ -75,11 +126,6 @@ const createPatientDB = async (req: any) => {
     });
     return { user: createUser, doctor: createPatient };
   });
-  return result;
-};
-
-const getUserDB = async () => {
-  const result = await Prisma.user.findMany({});
   return result;
 };
 

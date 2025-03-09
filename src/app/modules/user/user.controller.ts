@@ -1,6 +1,16 @@
 import { RequestHandler } from "express";
 import { userServices } from "./user.services";
 
+const getUser: RequestHandler = async (req, res) => {
+  const result = await userServices.getUserDB(req.query);
+  res.status(200).json({
+    success: true,
+    message: "Admin created",
+    meta: result.meta,
+    data: result.data,
+  });
+};
+
 const createAdmin: RequestHandler = async (req, res) => {
   try {
     const result = await userServices.createAdminDB(req);
@@ -36,7 +46,6 @@ const createDoctor: RequestHandler = async (req, res) => {
 };
 
 const createPatient: RequestHandler = async (req, res) => {
-  console.log(req.body);
   try {
     const result = await userServices.createPatientDB(req);
 
@@ -52,11 +61,6 @@ const createPatient: RequestHandler = async (req, res) => {
       error: err,
     });
   }
-};
-
-const getUser: RequestHandler = async (req, res) => {
-  const result = await userServices.getUserDB();
-  res.status(200).send(result);
 };
 
 export const userController = {

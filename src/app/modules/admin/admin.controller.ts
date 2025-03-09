@@ -41,6 +41,7 @@ const deleteAdmin: RequestHandler = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
+
 const softDeleteAdmin: RequestHandler = catchAsync(async (req, res, next) => {
   const result = await adminServices.softDeleteAdminDB(req.params.id as string);
   res.status(200).json({

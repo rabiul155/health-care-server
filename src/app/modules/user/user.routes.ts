@@ -7,6 +7,7 @@ import { userValidation } from "./user.validation";
 const router = express.Router();
 
 router.get("/", userController.getUser);
+
 router.post(
   "/create-admin",
   uploadFile.uploadImage,
