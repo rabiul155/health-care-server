@@ -46,7 +46,7 @@ router.post(
 
 router.patch("/:id/status", userController.updateUserStatus);
 
-router.post(
+router.patch(
   "/update-profile",
   Authenticate,
   uploadFile.uploadImage,
@@ -54,8 +54,7 @@ router.post(
     req.body = JSON.parse(req.body.data);
     next();
   },
-  validateRequest(userValidation.adminValidationSchema),
-  userController.createAdmin
+  userController.updateMyProfile
 );
 
 export const userRoutes = router;

@@ -60,7 +60,7 @@ const getMe = catchAsync(async (req, res, next) => {
   });
 });
 const updateMyProfile = catchAsync(async (req, res, next) => {
-  const result = await userServices.updateMyProfile(req.user, req.body);
+  const result = await userServices.updateMyProfile(req.user, req);
 
   res.status(200).json({
     success: true,
