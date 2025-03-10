@@ -168,10 +168,25 @@ const updateUserStatusDB = async (id: string, body: any) => {
   return result;
 };
 
+const getMeDB = async (id: string, role: UserRole) => {
+  const result = await Prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      admin: role === UserRole.ADMIN,
+      doctor: role === UserRole.DOCTOR,
+      patient: role === UserRole.PATIENT,
+    },
+  });
+  return result;
+};
+
 export const userServices = {
   createAdminDB,
   createDoctorDB,
   createPatientDB,
   updateUserStatusDB,
   getUserDB,
+  getMeDB,
 };

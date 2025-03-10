@@ -3,10 +3,13 @@ import { userController } from "./user.controller";
 import { uploadFile } from "../../middleware/fileUploader";
 import validateRequest from "../../middleware/validateRequest";
 import { userValidation } from "./user.validation";
+import { Authenticate } from "../../middleware/auth";
 
 const router = express.Router();
 
 router.get("/", userController.getUser);
+
+router.get("/me", Authenticate, userController.getMe);
 
 router.post(
   "/create-admin",

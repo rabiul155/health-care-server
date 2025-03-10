@@ -50,10 +50,22 @@ const updateUserStatus = catchAsync(async (req, res, next) => {
   });
 });
 
+const getMe = catchAsync(async (req, res, next) => {
+  console.log(req.user);
+  const result = await userServices.getMeDB(req.user.id, req.user.role);
+
+  res.status(200).json({
+    success: true,
+    message: "User found",
+    data: result,
+  });
+});
+
 export const userController = {
   createAdmin,
   createDoctor,
   createPatient,
   getUser,
   updateUserStatus,
+  getMe,
 };
