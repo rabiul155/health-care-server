@@ -3,7 +3,8 @@ import Prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
 import { uploadFile } from "../../middleware/fileUploader";
 import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
-import AppError from "../../utils/appError";
+import { Request } from "express";
+import { JwtPayload } from "jsonwebtoken";
 
 const getUserDB = async (params: Record<string, unknown>) => {
   const { search, ...othersField } = sanitizeSearchParam(params, [
@@ -81,7 +82,7 @@ const getUserDB = async (params: Record<string, unknown>) => {
   };
 };
 
-const createAdminDB = async (req: any) => {
+const createAdminDB = async (req: Request) => {
   const data = req.body;
   const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
 
@@ -105,7 +106,7 @@ const createAdminDB = async (req: any) => {
   return result;
 };
 
-const createDoctorDB = async (req: any) => {
+const createDoctorDB = async (req: Request) => {
   const data = req.body;
   const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
 
@@ -130,7 +131,7 @@ const createDoctorDB = async (req: any) => {
   return result;
 };
 
-const createPatientDB = async (req: any) => {
+const createPatientDB = async (req: Request) => {
   const data = req.body;
 
   const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
@@ -186,8 +187,8 @@ const getMeDB = async (id: string, role: UserRole) => {
   return result;
 };
 
-const updateMyProfile = async (user: any, req: any) => {
-  if (req.file) {
+const updateMyProfile = async (user: JwtPayload, req: Request) => {
+  if (req?.file) {
     const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
     req.body.profilePhoto = uploadImage?.secure_url;
   }
