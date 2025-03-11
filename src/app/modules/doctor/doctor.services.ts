@@ -1,6 +1,12 @@
 import { Doctor, UserStatus } from "@prisma/client";
 import prisma from "../../Prisma";
 
+const getDoctorFormDB = async () => {
+  const result = await prisma.doctor.findMany({});
+
+  return result;
+};
+
 const getByIdFromDB = async (id: string): Promise<Doctor | null> => {
   const result = await prisma.doctor.findUnique({
     where: {
@@ -96,4 +102,5 @@ export const DoctorService = {
   getByIdFromDB,
   deleteFromDB,
   softDelete,
+  getDoctorFormDB,
 };

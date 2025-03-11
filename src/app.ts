@@ -12,6 +12,7 @@ import { authRouter } from "./app/modules/auth/auth.routes";
 import globalErrorHandler from "./app/middleware/globalErrorHandler";
 import notFoundRoute from "./app/middleware/notFoundRoute";
 import { specialtiesRouter } from "./app/modules/specialties/specialties.route";
+import { DoctorRoutes } from "./app/modules/doctor/doctor.route";
 
 // middleware
 app.use(cors());
@@ -29,6 +30,7 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/specialties", specialtiesRouter);
+app.use("/api/v1/doctor", DoctorRoutes);
 
 //catch not found route
 app.use("*", notFoundRoute);
