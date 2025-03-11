@@ -1,6 +1,6 @@
 import { UserStatus } from "@prisma/client";
 import AppError from "../../utils/appError";
-import Prisma from "../../Prisma";
+import prisma from "../../Prisma";
 import { JwtPayload } from "jsonwebtoken";
 import {
   createToken,
@@ -11,7 +11,7 @@ import {
 import sendEmail from "../../utils/emailSender";
 
 const loginUserDB = async (data: any) => {
-  const result = await Prisma.user.findUnique({
+  const result = await prisma.user.findUnique({
     where: {
       email: data.email,
       // status: UserStatus.ACTIVE,
@@ -31,7 +31,7 @@ const loginUserDB = async (data: any) => {
 };
 
 const findUser = async (email: string) => {
-  const result = await Prisma.user.findUnique({
+  const result = await prisma.user.findUnique({
     where: {
       email,
       status: UserStatus.ACTIVE,
@@ -41,7 +41,7 @@ const findUser = async (email: string) => {
 };
 
 const changePasswordDB = async (user: JwtPayload, payload: any) => {
-  const userDB = await Prisma.user.findUnique({
+  const userDB = await prisma.user.findUnique({
     where: {
       email: user.email,
     },
@@ -62,7 +62,7 @@ const changePasswordDB = async (user: JwtPayload, payload: any) => {
 
   const hashPass = await hashPassword(payload.newPassword);
 
-  const result = await Prisma.user.update({
+  const result = await prisma.user.update({
     where: {
       email: user.email,
     },
@@ -74,7 +74,7 @@ const changePasswordDB = async (user: JwtPayload, payload: any) => {
 };
 
 const forgotPassword = async (payload: any) => {
-  const user = await Prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUniqueOrThrow({
     where: {
       email: payload.email,
     },
@@ -100,7 +100,7 @@ const resetPassword = async (token: string | undefined, payload: any) => {
   }
 
   const hashPass = await hashPassword(payload.password);
-  const user = await Prisma.user.update({
+  const user = await prisma.user.update({
     where: {
       email: payload.email,
     },

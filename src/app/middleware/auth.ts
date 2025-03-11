@@ -27,7 +27,7 @@ export const Authenticate: RequestHandler = catchAsync(
     const decoded = verifyToken(token);
 
     // 3) Check if user still exists
-    const currentUser = await Prisma.user.findUnique({
+    const currentUser = await prisma.user.findUnique({
       where: { email: decoded.email },
     });
 

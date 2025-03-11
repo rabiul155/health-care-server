@@ -1,5 +1,5 @@
 import { Request } from "express";
-import Prisma from "../../Prisma";
+import prisma from "../../Prisma";
 import { FileUploader } from "../../middleware/fileUploader";
 
 const createSpecialties = async (req: Request) => {
@@ -7,7 +7,7 @@ const createSpecialties = async (req: Request) => {
     const uploadedImage: any = await FileUploader.uploadToCloudinary(req.file);
     req.body.icon = uploadedImage.secure_url;
   }
-  const result = await Prisma.specialties.create({
+  const result = await prisma.specialties.create({
     data: req.body,
   });
 
@@ -15,7 +15,7 @@ const createSpecialties = async (req: Request) => {
 };
 
 const getSpecialties = async () => {
-  const result = await Prisma.specialties.findMany({});
+  const result = await prisma.specialties.findMany({});
   return result;
 };
 

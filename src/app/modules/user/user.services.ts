@@ -1,5 +1,5 @@
 import { UserRole } from "@prisma/client";
-import Prisma from "../../Prisma";
+import prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
 import { FileUploader } from "../../middleware/fileUploader";
 import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
@@ -41,7 +41,7 @@ const getUserDB = async (params: Record<string, unknown>) => {
 
   // console.dir(whereCondition, { depth: Infinity });
 
-  const result = await Prisma.user.findMany({
+  const result = await prisma.user.findMany({
     where: whereCondition,
     skip: skip,
     take: limit,
@@ -68,7 +68,7 @@ const getUserDB = async (params: Record<string, unknown>) => {
     // },
   });
 
-  const total = await Prisma.user.count({
+  const total = await prisma.user.count({
     where: whereCondition,
   });
 
@@ -94,7 +94,7 @@ const createAdminDB = async (req: Request) => {
     role: UserRole.ADMIN,
   };
 
-  const result = await Prisma.$transaction(async (transaction) => {
+  const result = await prisma.$transaction(async (transaction) => {
     const createUser = await transaction.user.create({
       data: userData,
     });
@@ -118,7 +118,7 @@ const createDoctorDB = async (req: Request) => {
     role: UserRole.DOCTOR,
   };
 
-  const result = await Prisma.$transaction(async (transaction) => {
+  const result = await prisma.$transaction(async (transaction) => {
     const createUser = await transaction.user.create({
       data: userData,
     });
@@ -144,7 +144,7 @@ const createPatientDB = async (req: Request) => {
     role: UserRole.PATIENT,
   };
 
-  const result = await Prisma.$transaction(async (transaction) => {
+  const result = await prisma.$transaction(async (transaction) => {
     const createUser = await transaction.user.create({
       data: userData,
     });
@@ -158,7 +158,7 @@ const createPatientDB = async (req: Request) => {
 };
 
 const updateUserStatusDB = async (id: string, body: any) => {
-  const result = await Prisma.user.update({
+  const result = await prisma.user.update({
     where: {
       id,
     },
@@ -170,7 +170,7 @@ const updateUserStatusDB = async (id: string, body: any) => {
 };
 
 const getMeDB = async (id: string, role: UserRole) => {
-  const user = Prisma.user;
+  const user = prisma.user;
   const result = await user.findUnique({
     where: {
       id: id,
@@ -195,10 +195,10 @@ const updateMyProfile = async (user: JwtPayload, req: Request) => {
 
   // function getTableModel(role: string) {
   //   const tables = {
-  //     SUPER_ADMIN: Prisma.admin,
-  //     ADMIN: Prisma.admin,
-  //     DOCTOR: Prisma.doctor,
-  //     PATIENT: Prisma.patient,
+  //     SUPER_ADMIN: prisma.admin,
+  //     ADMIN: prisma.admin,
+  //     DOCTOR: prisma.doctor,
+  //     PATIENT: prisma.patient,
   //   } as const;
   //   return tables[role as keyof typeof tables]; // Ensure type safety
   // }
@@ -212,28 +212,28 @@ const updateMyProfile = async (user: JwtPayload, req: Request) => {
   let profileInfo;
 
   if (user.role === UserRole.SUPER_ADMIN) {
-    profileInfo = await Prisma.admin.update({
+    profileInfo = await prisma.admin.update({
       where: {
         email: user.email,
       },
       data: req.body,
     });
   } else if (user.role === UserRole.ADMIN) {
-    profileInfo = await Prisma.admin.update({
+    profileInfo = await prisma.admin.update({
       where: {
         email: user.email,
       },
       data: req.body,
     });
   } else if (user.role === UserRole.DOCTOR) {
-    profileInfo = await Prisma.doctor.update({
+    profileInfo = await prisma.doctor.update({
       where: {
         email: user.email,
       },
       data: req.body,
     });
   } else if (user.role === UserRole.PATIENT) {
-    profileInfo = await Prisma.patient.update({
+    profileInfo = await prisma.patient.update({
       where: {
         email: user.email,
       },
