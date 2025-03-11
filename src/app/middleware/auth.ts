@@ -3,8 +3,8 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import { verifyToken } from "../utils/AuthHelpers";
 import AppError from "../utils/appError";
-import Prisma from "../Prisma";
 import { UserRole } from "@prisma/client";
+import prisma from "../Prisma";
 
 export const Authenticate: RequestHandler = catchAsync(
   async (req, res, next) => {

@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import { DoctorService } from "./doctor.services";
 
 const getAllFromDB: RequestHandler = catchAsync(async (req, res, next) => {
+  console.log(req);
   const result = await DoctorService.getDoctorFormDB();
   res.status(200).json({
     success: true,
