@@ -33,6 +33,7 @@ const updateIntoDB = async (id: string, payload: any) => {
     },
   });
 
+  // update doctor
   await prisma.$transaction(async (transactionClient) => {
     await transactionClient.doctor.update({
       where: {
@@ -40,6 +41,35 @@ const updateIntoDB = async (id: string, payload: any) => {
       },
       data: doctorData,
     });
+
+    const addSpecialties: any[] = [];
+    const deleteSpecialties: any[] = [];
+
+    specialties.forEach((specialty: any) => {
+      if (specialty.isDeleted === false) {
+        addSpecialties.push({
+          specialtiesId: specialty.id,
+          doctorId: doctorData.id,
+        });
+      } else {
+        deleteSpecialties.push({
+          doctorId: doctorData.id,
+          specialtiesId: specialty.id,
+        });
+      }
+    });
+
+    await transactionClient.doctorSpecialties.createMany({
+      data: addSpecialties,
+    });
+    for (const del of deleteSpecialties) {
+      await transactionClient.doctorSpecialties.deleteMany({
+        where: {
+          doctorId: del.doctorId,
+          specialtiesId: del.specialtiesId,
+        },
+      });
+    }
   });
 
   const result = await prisma.doctor.findUnique({

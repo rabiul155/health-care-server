@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import catchAsync from "../../utils/catchAsync";
 import { DoctorService } from "./doctor.services";
 
