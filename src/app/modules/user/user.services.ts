@@ -1,7 +1,7 @@
 import { UserRole } from "@prisma/client";
 import Prisma from "../../Prisma";
 import { hashPassword } from "../../utils/AuthHelpers";
-import { uploadFile } from "../../middleware/fileUploader";
+import { FileUploader } from "../../middleware/fileUploader";
 import { paginateOrder, sanitizeSearchParam } from "../../utils/helpers";
 import { Request } from "express";
 import { JwtPayload } from "jsonwebtoken";
@@ -84,7 +84,7 @@ const getUserDB = async (params: Record<string, unknown>) => {
 
 const createAdminDB = async (req: Request) => {
   const data = req.body;
-  const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
+  const uploadImage: any = await FileUploader.uploadToCloudinary(req.file);
 
   const hashPass = await hashPassword(data.password);
 
@@ -108,7 +108,7 @@ const createAdminDB = async (req: Request) => {
 
 const createDoctorDB = async (req: Request) => {
   const data = req.body;
-  const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
+  const uploadImage: any = await FileUploader.uploadToCloudinary(req.file);
 
   const hashPass = await hashPassword(data.password);
 
@@ -134,7 +134,7 @@ const createDoctorDB = async (req: Request) => {
 const createPatientDB = async (req: Request) => {
   const data = req.body;
 
-  const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
+  const uploadImage: any = await FileUploader.uploadToCloudinary(req.file);
 
   const hashPass = await hashPassword(data.password);
 
@@ -189,7 +189,7 @@ const getMeDB = async (id: string, role: UserRole) => {
 
 const updateMyProfile = async (user: JwtPayload, req: Request) => {
   if (req?.file) {
-    const uploadImage: any = await uploadFile.uploadToCloudinary(req.file);
+    const uploadImage: any = await FileUploader.uploadToCloudinary(req.file);
     req.body.profilePhoto = uploadImage?.secure_url;
   }
 

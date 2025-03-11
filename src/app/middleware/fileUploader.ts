@@ -50,7 +50,7 @@ async function uploadToCloudinary(file: any) {
   return uploadResult;
 }
 
-export const uploadFile = {
+export const FileUploader = {
   uploadImage,
   uploadToCloudinary,
 };

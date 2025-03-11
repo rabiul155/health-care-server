@@ -11,6 +11,7 @@ import { adminRouter } from "./app/modules/admin/admin.routes";
 import { authRouter } from "./app/modules/auth/auth.routes";
 import globalErrorHandler from "./app/middleware/globalErrorHandler";
 import notFoundRoute from "./app/middleware/notFoundRoute";
+import { specialtiesRouter } from "./app/modules/specialties/specialties.services";
 
 // middleware
 app.use(cors());
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/specialties", specialtiesRouter);
 
 //catch not found route
 app.use("*", notFoundRoute);
