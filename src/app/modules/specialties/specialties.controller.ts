@@ -12,6 +12,17 @@ const createSpecialties: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const getSpecialties: RequestHandler = catchAsync(async (req, res) => {
+  const result = await specialtiesServices.getSpecialties();
+
+  res.status(200).json({
+    success: true,
+    message: "Specialties fetched successfully",
+    data: result,
+  });
+});
+
 export const specialtiesController = {
   createSpecialties,
+  getSpecialties,
 };

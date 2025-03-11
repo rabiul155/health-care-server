@@ -14,4 +14,6 @@ router.post(
   specialtiesController.createSpecialties
 );
 
+router.get("/", Authenticate, specialtiesController.getSpecialties);
+
 export const specialtiesRouter = router;
