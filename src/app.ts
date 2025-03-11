@@ -11,7 +11,7 @@ import { adminRouter } from "./app/modules/admin/admin.routes";
 import { authRouter } from "./app/modules/auth/auth.routes";
 import globalErrorHandler from "./app/middleware/globalErrorHandler";
 import notFoundRoute from "./app/middleware/notFoundRoute";
-import { specialtiesRouter } from "./app/modules/specialties/specialties.services";
+import { specialtiesRouter } from "./app/modules/specialties/specialties.route";
 
 // middleware
 app.use(cors());

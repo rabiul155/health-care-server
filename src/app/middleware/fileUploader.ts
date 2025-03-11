@@ -1,6 +1,7 @@
-import multer from "multer";
-import path from "path";
 import fs from "fs";
+import path from "path";
+
+import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import AppError from "../utils/appError";
 
